@@ -1,0 +1,67 @@
+# Secrets & Config
+.env
+.env.local
+*.key
+*.pem
+credentials.json
+
+# Claude Code / MCP
+.mcp.json
+.claude/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ROS2
+log/
+install/
+build/
+*.log
+
+# Large dependencies (clone separately)
+PX4-Autopilot/
+Micro-XRCE-DDS-Agent/
+px4_msgs/
+ros-mcp/
+
+# PX4 artifacts
+*.ulg
+dataman
+parameters.bson
+parameters_backup.bson
+
+# Gazebo
+.gz/
+.gazebo/
+
+# Micro-XRCE-DDS-Agent build artifacts
+Micro-XRCE-DDS-Agent/build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Old docs / archives
+old_docs/
+old_archive_gemini/
+
+# Temporary files
+*.tmp
+tmp/
+temp/
+/tmp/
