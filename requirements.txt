@@ -1,0 +1,15 @@
+# Dronoid - Python Dependencies
+
+# MAVLink communication
+pymavlink>=2.4.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# HTTP requests for OpenRouter (optional)
+requests>=2.31.0
+
+# ROS2 dependencies (installed via apt)
+# - ros-jazzy-desktop
+# - ros-jazzy-ros2-control
+# - ros-jazzy-ros2-controllers

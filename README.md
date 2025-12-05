@@ -42,12 +42,17 @@ sudo apt install -y \
 # Install Python packages
 pip3 install --break-system-packages \
     pymavlink \
+    python-dotenv \
+    requests \
     kconfiglib \
     pyros-genmsg \
     packaging \
     toml \
     numpy \
     jinja2
+
+# Or use requirements.txt:
+pip3 install --break-system-packages -r requirements.txt
 ```
 
 ### 2. Clone and Setup
@@ -171,17 +176,33 @@ ros2 run dronecore drone_commander
 
 ## 🧠 Natural Language Processing
 
-### Current: Regex-Based (Lightweight)
-- Simple pattern matching
-- No ML model needed
-- Very fast, runs on any hardware
-- Example: `if "takeoff" in text: takeoff()`
+Dronoid supports **two modes** for understanding your commands:
 
-### Future: Cloud LLM (OpenRouter)
-- Contextual understanding
-- Complex command parsing
-- "Fly to that dirty spot" → Vision + Navigation
-- Set `OPENROUTER_API_KEY` in `.env`
+### 1. Regex Parser (Default - Lightweight)
+- ⚡ **Fast**: Instant response
+- 💻 **No internet needed**: Works offline
+- 🪶 **Lightweight**: No ML model, runs on any hardware
+- 📝 Pattern matching: `"takeoff" → takeoff()`
+
+**Perfect for**: Weak laptops, offline use, predictable commands
+
+### 2. Cloud LLM via OpenRouter (Optional - Smart)
+- 🤖 **Intelligent**: Understands context and synonyms
+- 🌍 **Multilingual**: Works in any language
+- 💡 **Flexible**: "fly a bit higher" → understands intent
+- 🆓 **Free tier available**: Google Gemini Flash 1.5
+
+**Setup** (optional):
+```bash
+# 1. Get free API key: https://openrouter.ai/keys
+# 2. Copy example config
+cp .env.example .env
+
+# 3. Edit .env and add your key
+nano .env  # or use any text editor
+```
+
+The system **automatically falls back to regex** if OpenRouter is unavailable!
 
 ## 🔧 Configuration
 
