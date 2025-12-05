@@ -1,0 +1,71 @@
+#!/bin/bash
+# Dronoid PX4 Client - Robust wrapper that ensures PX4 is running
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
+
+echo "🚁 Dronoid - Natural Language Drone Control"
+echo "==========================================="
+echo ""
+
+# Function to check if PX4 is running
+check_px4() {
+    if pgrep -x "px4" > /dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Function to wait for PX4 to be ready
+wait_for_px4() {
+    echo "⏳ Waiting for PX4 to be ready..."
+    local max_wait=30
+    local waited=0
+
+    while [ $waited -lt $max_wait ]; do
+        if grep -q "Ready for takeoff" /tmp/px4_run.log 2>/dev/null; then
+            echo "✓ PX4 is ready!"
+            return 0
+        fi
+        sleep 1
+        waited=$((waited + 1))
+        echo -n "."
+    done
+
+    echo ""
+    echo "⚠️  Timeout waiting for PX4. Continuing anyway..."
+    return 1
+}
+
+# Check if PX4 is running
+if ! check_px4; then
+    echo "⚠️  PX4 is not running!"
+    echo ""
+    echo "Starting PX4 + Gazebo..."
+    echo "This will take ~20 seconds..."
+    echo ""
+
+    # Start PX4
+    ./start_drone.sh > /dev/null 2>&1 &
+
+    # Wait for startup
+    sleep 5
+    wait_for_px4
+
+    echo ""
+else
+    echo "✓ PX4 is running"
+    echo ""
+fi
+
+# Launch natural language control
+echo "Starting Natural Language Control..."
+echo ""
+python3 nl_drone.py
+
+# Cleanup on exit
+echo ""
+echo "👋 Goodbye!"

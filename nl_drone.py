@@ -29,19 +29,32 @@ OPENROUTER_MODEL = os.getenv('OPENROUTER_MODEL', 'google/gemini-flash-1.5:free')
 print("Verbinde zu PX4...")
 master = mavutil.mavlink_connection('udpout:127.0.0.1:14580', source_system=255)
 
-# Trigger Heartbeat durch REQUEST_DATA_STREAM
+# Robuster Verbindungsaufbau mit Retry
 print("Triggere Heartbeat...")
-for i in range(3):
+connected = False
+max_retries = 10
+
+for retry in range(max_retries):
+    # Send REQUEST_DATA_STREAM to trigger response
     master.mav.request_data_stream_send(0, 0, mavutil.mavlink.MAV_DATA_STREAM_ALL, 1, 1)
-    time.sleep(0.3)
 
-print("Warte auf Heartbeat (5 Sekunden)...")
-msg = master.wait_heartbeat(timeout=5)
+    # Wait for heartbeat with short timeout
+    msg = master.wait_heartbeat(timeout=2)
 
-if not msg:
+    if msg:
+        connected = True
+        break
+
+    if retry < max_retries - 1:
+        print(f"  Retry {retry + 1}/{max_retries - 1}...")
+        time.sleep(1)
+
+if not connected:
     print("\n❌ FEHLER: Keine Verbindung zu PX4!")
-    print("   Stelle sicher, dass PX4 läuft:")
-    print("   → ./start_drone.sh")
+    print("   Mögliche Gründe:")
+    print("   1. PX4 läuft nicht → ./start_drone.sh")
+    print("   2. PX4 startet noch → warte 10 Sekunden und versuch nochmal")
+    print("   3. Port blockiert → killall px4 && ./start_drone.sh")
     exit(1)
 
 print(f"✓ Verbunden mit PX4 System {master.target_system}")

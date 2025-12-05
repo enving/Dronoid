@@ -80,7 +80,17 @@ This will:
 
 ### 4. Control the Drone
 
+**Easy Mode** (auto-starts PX4 if needed):
 ```bash
+./px4-client
+```
+
+**Manual Mode**:
+```bash
+# Make sure PX4 is running first
+./start_drone.sh
+
+# Then start control
 python3 nl_drone.py
 ```
 
