@@ -21,6 +21,19 @@
 - **🎯 Vision-Ready**: Prepared for VLM integration (Wall-X, TinyML)
 - **📦 Plug & Play**: YAML-based hardware configuration
 
+## ⚡ TL;DR - Fastest Start
+
+```bash
+git clone https://github.com/enving/Dronoid.git
+cd Dronoid
+./setup_dependencies.sh  # Download PX4, build deps (~5 min)
+./px4-client             # Auto-starts everything!
+```
+
+Type `takeoff` and watch your drone fly! 🚁
+
+---
+
 ## 🚀 Quick Start (5 Minutes)
 
 ### 1. Install Dependencies
@@ -213,6 +226,27 @@ nano .env  # or use any text editor
 ```
 
 The system **automatically falls back to regex** if OpenRouter is unavailable!
+
+## 🛡️ Robust Connection Handling
+
+Dronoid includes smart connection management to make your experience smooth:
+
+### Auto-Recovery Features
+- **10 Retry Attempts**: Automatically retries connection if PX4 is starting
+- **Intelligent Port Detection**: Tests multiple MAVLink ports
+- **Clear Error Messages**: Helpful troubleshooting hints if connection fails
+- **Auto-Start Wrapper**: `px4-client` checks if PX4 is running and starts it automatically
+
+### How It Works
+```bash
+./px4-client
+  ↓
+Checks: Is PX4 running?
+  ├─ Yes → Connect to drone ✓
+  └─ No  → Start PX4 → Wait for ready → Connect ✓
+```
+
+This means **you never have to manually start PX4** - just run `./px4-client` and fly!
 
 ## 🔧 Configuration
 
